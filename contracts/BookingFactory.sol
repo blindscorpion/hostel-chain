@@ -40,7 +40,9 @@ contract BookingFactory is ERC721, DateTime {
     function makeBooking (
         string memory _name,
         uint _roomNumber,
-        uint _checkInDate,
+        uint8 _checkInDay,
+        uint8 _checkInMonth,
+        uint16 _checkInYear,
         uint _numDaysStayed,
         uint _dailyPrice,
         uint _totalPrice,
@@ -48,12 +50,13 @@ contract BookingFactory is ERC721, DateTime {
     ) public returns (uint256) {
     bool success = _acceptPayment(_totalPrice);
     require(success, "USD transfer failed");
-    _bookRooms(_checkInDate, _numDaysStayed, _roomNumber);
+    uint timeStamp = toTimestamp(_checkInYear, _checkInMonth, _checkInDay);
+    _bookRooms(timeStamp, _numDaysStayed, _roomNumber);
     _safeMint(msg.sender, tokenCounter);
     bookings[tokenCounter][msg.sender] = GuestInfo({
         name: _name,
         roomNumber: _roomNumber,
-        checkInDate: _checkInDate,
+        checkInDate: timeStamp,
         numDaysStayed: _numDaysStayed,
         dailyPrice: _dailyPrice,
         totalPrice: _totalPrice,
