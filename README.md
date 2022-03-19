@@ -1,46 +1,19 @@
-# Advanced Sample Hardhat Project
+# Hostel Chain Booking and Payment System
 
-This project demonstrates an advanced Hardhat use case, integrating other tools commonly used alongside Hardhat in the ecosystem.
+This is a smart contract that allows hostels and hotels to accept crypto payments and issue a receipt in the form of an NFT. Currently it is configured to accept USDC on the Polygon blockchain. This can be expanded in the future.
 
-The project comes with a sample contract, a test for that contract, a sample script that deploys that contract, and an example of a task implementation, which simply lists the available accounts. It also comes with a variety of other tools, preconfigured to work with the project code.
+## Current Features
 
-Try running some of the following tasks:
+* Accepts payment for stay
+* Issues NFT to customer with information about their booking
+* Checks availability of room/dates before issuing NFT
 
-```shell
-npx hardhat accounts
-npx hardhat compile
-npx hardhat clean
-npx hardhat test
-npx hardhat node
-npx hardhat help
-REPORT_GAS=true npx hardhat test
-npx hardhat coverage
-npx hardhat run scripts/deploy.ts
-TS_NODE_FILES=true npx ts-node scripts/deploy.ts
-npx eslint '**/*.{js,ts}'
-npx eslint '**/*.{js,ts}' --fix
-npx prettier '**/*.{json,sol,md}' --check
-npx prettier '**/*.{json,sol,md}' --write
-npx solhint 'contracts/**/*.sol'
-npx solhint 'contracts/**/*.sol' --fix
-```
+## Future Features
 
-# Etherscan verification
+* Admin layer for hostel to control price, issue cancellation, etc.
+* NFT could directly serve as a key to room and facilities
+* NFT is "Living Receipt" that gets updated as customer purchases extras (i.e. Customer books an hour in the gym directly through the contract)
+* Expand to different blockchains and payment methods beyond USDC
 
-To try out Etherscan verification, you first need to deploy a contract to an Ethereum network that's supported by Etherscan, such as Ropsten.
 
-In this project, copy the .env.example file to a file named .env, and then edit it to fill in the details. Enter your Etherscan API key, your Ropsten node URL (eg from Alchemy), and the private key of the account which will send the deployment transaction. With a valid .env file in place, first deploy your contract:
 
-```shell
-hardhat run --network ropsten scripts/deploy.ts
-```
-
-Then, copy the deployment address and paste it in to replace `DEPLOYED_CONTRACT_ADDRESS` in this command:
-
-```shell
-npx hardhat verify --network ropsten DEPLOYED_CONTRACT_ADDRESS "Hello, Hardhat!"
-```
-
-# Performance optimizations
-
-For faster runs of your tests and scripts, consider skipping ts-node's type checking by setting the environment variable `TS_NODE_TRANSPILE_ONLY` to `1` in hardhat's environment. For more details see [the documentation](https://hardhat.org/guides/typescript.html#performance-optimizations).
