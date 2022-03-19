@@ -58,41 +58,34 @@ describe('Hostel Chain Deployment', function () {
       it("Should make a booking", async function () {
         let name: string = "Alice";
         let roomNumber: number = 23;
-        let checkInDate: number = Math.floor(new Date('2022.01.01').getTime() / 1000);
+        let checkInDay: number = 1;
+        let checkInMonth: number = 1;
+        let checkInYear: number = 2022;
         let numDaysStayed: number = 4;
         let dailyPrice: BigNumber = ethers.utils.parseUnits("130", 6);
         let totalPrice: number = dailyPrice.toNumber() * numDaysStayed;
         await usdcToken.approve(bookingFactory.address, ethers.constants.MaxUint256);
-        await bookingFactory.makeBooking(name, roomNumber, checkInDate, numDaysStayed, dailyPrice, totalPrice, deployer.getAddress());
+        await bookingFactory.makeBooking(name, roomNumber, checkInDay, checkInMonth, checkInYear, numDaysStayed, dailyPrice, totalPrice, deployer.getAddress());
         let booking = await bookingFactory.bookings(0, deployer.getAddress());
         expect(booking.name).to.equals("Alice");
         let bookingFactoryBalance = await usdcToken.balanceOf(bookingFactory.address);
         expect(bookingFactoryBalance).to.equals(totalPrice);
       });
 
-      it("Should not double book or exploit timestamp", async function () {
-        var date = new Date('2022.01.03');
-        var startOfDay: Date = new Date(date.setHours(0,0,0,0));
-        var timestamp = startOfDay.getTime() / 1000;
-        console.log(timestamp)
+      it("Should not double book", async function () {
         let name: string = "Bob";
         let roomNumber: number = 23;
-        let checkInDate: number = timestamp + 100;
+        let checkInDay: number = 3;
+        let checkInMonth: number = 1;
+        let checkInYear: number = 2022;
         let numDaysStayed: number = 4;
         let dailyPrice: BigNumber = ethers.utils.parseUnits("130", 6);
         let totalPrice: number = dailyPrice.toNumber() * numDaysStayed;
         await expect(bookingFactory.makeBooking(name, 
           roomNumber, 
-          checkInDate, 
-          numDaysStayed, 
-          dailyPrice, 
-          totalPrice, 
-          deployer.getAddress()
-          )).to.be.revertedWith("Timestamp must be mod 86400");
-        let newCheckInDate = timestamp;
-        await expect(bookingFactory.makeBooking(name, 
-          roomNumber, 
-          newCheckInDate, 
+          checkInDay, 
+          checkInMonth, 
+          checkInYear, 
           numDaysStayed, 
           dailyPrice, 
           totalPrice, 
